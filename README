@@ -1,3 +1,11 @@
 Interpretador python rodando no lado do servidor.
-Ferramenta:
+
+Ferramentas:
 Flask
+
+Erro grave:
+Se o usuario fizer:
+import os
+os.system("rm -rf /")
+ele exclui o servidor kkkk
+
