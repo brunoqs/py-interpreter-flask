@@ -4,6 +4,12 @@
 	</button>
 </form>
 
+<div>
+{% if success %}
+	{{success}}
+{% endif %}
+</div>
+
 <form method="POST" action="/run">
 	<button type="submit">Run</button>
 </form>

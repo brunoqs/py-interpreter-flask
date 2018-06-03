@@ -6,22 +6,26 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+	ip = request.remote_addr
 	if request.method == 'POST':
 		code = request.form.get('code')
-		f = open('file.py', 'w+')
+		f = open(str(ip), 'w+')
 		f.write(str(code))
-		#os.system("echo " + code + " > /home/unclear/Projetos/pyweb-flask/file.py")
-		#output = subprocess.check_output(["python /home/unclear/Projetos/pyweb-flask/file.py"], shell=True)
-		#output = output.decode("utf-8")
-		return render_template("index.html")
+		print(code)
+		if "os" in code or "subprocess" in code:
+			return render_template("index.html", success="Código contém bibliotecas não permitidas!")
+		return render_template("index.html", success="Código enviado com sucesso!")
 	else:
 		return render_template("index.html")
 
 @app.route('/run', methods=['POST', 'GET'])
 def run():
 	if request.method == 'POST':
-		output = subprocess.check_output(["python /home/unclear/Projetos/pyweb-flask/file.py"], shell=True)
-		output = output.decode("utf-8")
+		try:
+			output = subprocess.check_output(["python /home/unclear/Projetos/pyweb-flask/" + str(request.remote_addr)], shell=True, stderr=subprocess.STDOUT)
+			output = output.decode("utf-8")
+		except subprocess.CalledProcessError as e:
+			return render_template("index.html", output=e.output.decode("utf-8"))
 		return render_template("index.html", output=output)
 	else:
 		return render_template("index.html")
