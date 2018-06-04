@@ -9,11 +9,10 @@ def index():
 	ip = request.remote_addr
 	if request.method == 'POST':
 		code = request.form.get('code')
-		f = open(str(ip), 'w+')
-		f.write(str(code))
-		print(code)
 		if "os" in code or "subprocess" in code:
 			return render_template("index.html", success="Código contém bibliotecas não permitidas!")
+		f = open(str(ip), 'w+')
+		f.write(str(code))
 		return render_template("index.html", success="Código enviado com sucesso!")
 	else:
 		return render_template("index.html")
@@ -31,4 +30,4 @@ def run():
 		return render_template("index.html")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
